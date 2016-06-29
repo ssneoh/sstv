@@ -85,7 +85,7 @@ def FRESHSTART():
 
         #SWITCH THE SKIN IF THE CURRENT SKIN IS NOT CONFLUENCE
         if skin not in ['skin.confluence','skin.estuary']:
-                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]You are not using the default skin.[/B][/COLOR]','[COLOR orange]CLICK YES TO ATTEMPT TO AUTO SWITCH TO CONFLUENCE[/B][/COLOR]','[COLOR red][B]PLEASE DO NOT DO PRESS ANY BUTTONS OR MOVE THE MOUSE WHILE THIS PROCESS IS TAKING PLACE, IT IS AUTOMATIC[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]You are not using the default skin.[/B][/COLOR]','[COLOR orange]CLICK YES TO ATTEMPT TO AUTO SWITCH[/COLOR]','[COLOR red]PLEASE DO NOT DO PRESS ANY BUTTONS OR MOVE THE MOUSE WHILE THIS PROCESS IS TAKING PLACE, IT IS AUTOMATIC[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                 if choice == 0:
                         sys.exit(1)
                 skin = 'skin.estuary' if KODIV >= 17 else 'skin.confluence'
