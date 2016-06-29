@@ -47,7 +47,6 @@ PROFILES     =  xbmc.translatePath(os.path.join(USERDATA,'profiles.xml'))
 RSS          =  xbmc.translatePath(os.path.join(USERDATA,'RssFeeds.xml'))
 KEYMAPS      =  xbmc.translatePath(os.path.join(USERDATA,'keymaps','keyboard.xml'))
 USB          =  xbmc.translatePath(os.path.join(HOME,'backupdir'))
-CBPATH       =  xbmc.translatePath(os.path.join(USB,'Daily Updates Custom Builds',''))
 cookiepath   =  xbmc.translatePath(os.path.join(ADDON_DATA,AddonID,'cookiejar'))
 startuppath  =  xbmc.translatePath(os.path.join(ADDON_DATA,AddonID,'startup.xml'))
 tempfile     =  xbmc.translatePath(os.path.join(ADDON_DATA,AddonID,'temp.xml'))
@@ -79,9 +78,9 @@ def Backup():
     if ( not vq ): return False, 0
     title = urllib.quote_plus(vq)
     backup_zip = xbmc.translatePath(os.path.join(USB,title+'.zip'))
-    exclude_dirs_full =  ['packages'+'plugin.program.sswizard','backupdir','Thumbnails']
+    exclude_dirs_full =  ['packages'+'plugin.program.sswizard','repository.ssneoh.kodi','backupdir','Thumbnails']
     exclude_files_full = [title+".zip","spmc.log","spmc.old.log","xbmc.log","xbmc.old.log","kodi.log","kodi.old.log",'.DS_Store','.setup_complete','XBMCHelper.conf']
-    exclude_dirs =  ['packages','plugin.program.sswizard','backupdir','cache', 'system', 'Thumbnails', "peripheral_data",'library','keymaps']
+    exclude_dirs =  ['packages','plugin.program.sswizard','repository.ssneoh.kodi','backupdir','cache', 'system', 'Thumbnails', "peripheral_data",'library','keymaps']
     exclude_files = [title+".zip","spmc.log","spmc.old.log","xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","Textures13.db"]
     message_header = "Creating full backup..."
     message_header2 = "Creating full backup..."
