@@ -317,7 +317,7 @@ def DeleteCrashLogs():
                 os.remove(infile)
 
         dialog = xbmcgui.Dialog()
-        dialog.ok(MaintTitle, "Crash logs deleted", "[COLOR yellow]Thank you for using SS Wizard[/COLOR]")
+        dialog.ok(MaintTitle, "Crash logs deleted", "")
 
     else:
 
