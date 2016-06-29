@@ -134,7 +134,7 @@ if nointernet == 0 and SSUpdate == 0:
                                                                 else:
                                                                         choice = xbmcgui.Dialog().yesno("NEW UPDATE AVAILABLE", 'Found a new update for the Build', build + " ver: "+newversion, 'Do you want to install it now?', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                                                                         if choice == 1: 
-                                                                                dialog.ok('[COLOR red]A WIPE is required for the update[/COLOR]','Select the [COLOR green]YES[/COLOR] option in the NEXT WINDOW to wipe now.','Select the [COLOR red]NO[/COLOR] option in the NEXT WINDOW to update later.','[I][COLOR snow]If you wish to update later you can do so in [/COLOR][COLOR lime]SS[/COLOR] Wizard[/I]')
+                                                                                dialog.ok('[COLOR red]A WIPE is required for the update[/COLOR]','Select the [COLOR green]YES[/COLOR] option in the NEXT WINDOW to wipe now.','Select the [COLOR red]NO[/COLOR] option in the NEXT WINDOW to update later.','[COLOR snow]If you wish to update later you can do so in [/COLOR][COLOR lime]SS[/COLOR] Wizard')
                                                                                 wipe.FRESHSTART()
                                                                         else:
                                                                                 sys.exit(1)

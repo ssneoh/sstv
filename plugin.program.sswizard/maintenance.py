@@ -363,7 +363,7 @@ def viewLogFile():
 
 def autocleanask():
 
-    choice = xbmcgui.Dialog().yesno(MaintTitle, 'Selecting [COLOR green]YES[/COLOR] will delete your cache, thumbnails and packages.','[I][COLOR lightsteelblue]Do you wish to continue?[/I][/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+    choice = xbmcgui.Dialog().yesno(MaintTitle, 'Selecting [COLOR green]YES[/COLOR] will delete your cache, thumbnails and packages.','[COLOR lightsteelblue]Do you wish to continue?[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
     if choice == 1:
         autocleannow()
 
@@ -487,13 +487,13 @@ def autocleannow():
             for d in dirs:
                 shutil.rmtree(os.path.join(root, d))
 
-    choice = xbmcgui.Dialog().yesno(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted","[I][COLOR lightsteelblue]Do you want to restart your device now to finish the process?[/COLOR][/I]", yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+    choice = xbmcgui.Dialog().yesno(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted","[COLOR lightsteelblue]Do you want to restart your device now to finish the process?[/COLOR]", yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
     if choice == 1:
         Common.KillKodi()
 
 def autocleanask():
 
-    choice = xbmcgui.Dialog().yesno(MaintTitle, 'Selecting [COLOR green]YES[/COLOR] will delete your cache, thumbnails and packages.','[I][COLOR lightsteelblue]Do you wish to continue?[/I][/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+    choice = xbmcgui.Dialog().yesno(MaintTitle, 'Selecting [COLOR green]YES[/COLOR] will delete your cache, thumbnails and packages.','[COLOR lightsteelblue]Do you wish to continue?[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
     if choice == 1:
         autocleannow()
 
