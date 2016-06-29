@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+<addon id="plugin.program.sswizard"
+	     name="[COLOR lime]SS[/COLOR] Wizard"
+	     version="1.0.0"
+	     provider-name="SSNEOH">
+  <requires>
+  	<import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="startup">
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">[COLOR lime]SS[/COLOR] Wizard</summary>
+    <description lang="en">Custom builds and tools for KODI. Strictly for [B]PERSONAL USE[/B] only</description>
+    <disclaimer lang="en"></disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <email></email>
+  </extension>
+</addon>
+
+    <addon id="repository.ssneoh" name="SS Repository" version="1.0.0" provider-name="SSNEOH">
+        <requires>
+            <import addon="xbmc.addon" version="12.0.0"/>
+        </requires>
+        <extension point="xbmc.addon.repository" name="SS Repository">
+            <info compressed="false">https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/</datadir>
+            <hashes>false</hashes>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary>SS Repository - KODI addons, wizard and etc.</summary>
+            <description>Strictly for PERSONAL USE only.</description>
+            <platform>all</platform>
+    </extension>
+</addon>
+</addons>
