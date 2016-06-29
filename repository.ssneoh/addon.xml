@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <addon id="repository.ssneoh" name="SS Repository" version="1.0.0" provider-name="SSNEOH">
+    <addon id="repository.ssneoh" name="[COLOR lime]SS[/COLOR] Repository" version="1.0.0" provider-name="SSNEOH">
         <requires>
             <import addon="xbmc.addon" version="12.0.0"/>
         </requires>
@@ -11,7 +11,7 @@
         </extension>
         <extension point="xbmc.addon.metadata">
             <summary>SS Repository - KODI addons, wizard and etc.</summary>
-            <description>Strictly for PERSONAL USE only.</description>
+            <description>SS Repository - KODI addons, wizard and etc. Strictly for [B]PERSONAL USE[/B] only.</description>
             <platform>all</platform>
     </extension>
 </addon>
