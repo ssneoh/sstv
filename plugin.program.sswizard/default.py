@@ -15,7 +15,7 @@ import base64
 import socket
 import json
 
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 AddonData = xbmc.translatePath('special://userdata/addon_data')
 addon_id = 'plugin.program.sswizard'
 ADDON = xbmcaddon.Addon(id=addon_id)

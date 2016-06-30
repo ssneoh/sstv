@@ -15,8 +15,8 @@ AddonData = xbmc.translatePath('special://userdata/addon_data')
 addon_id = 'plugin.program.sswizard'
 ADDON = xbmcaddon.Addon(id=addon_id)
 AddonID='plugin.program.sswizard'
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
-MaintTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
+MaintTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 dialog       =  xbmcgui.Dialog()
 HOME         =  xbmc.translatePath('special://home/')
 dp           =  xbmcgui.DialogProgress()
@@ -25,10 +25,10 @@ USB          =  xbmc.translatePath(os.path.join(HOME,'backupdir'))
 FANART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id , 'fanart.jpg'))
 ICON = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'icon.png'))
 ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/resources/art/'))
-VERSION = "1.19"
+VERSION = "1.0.0"
 DBPATH = xbmc.translatePath('special://userdata/Database')
 TNPATH = xbmc.translatePath('special://userdata/Thumbnails');
-PATH = "TDB Wizard"            
+PATH = "SS Wizard"            
 BASEURL = "http://www.ssneoh.com"
 H = 'http://'
 skin         =  xbmc.getSkinDir()
@@ -85,7 +85,7 @@ def FRESHSTART():
 
         #SWITCH THE SKIN IF THE CURRENT SKIN IS NOT CONFLUENCE
         if skin not in ['skin.confluence','skin.estuary']:
-                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]You are not using the default skin.[/B][/COLOR]','[COLOR orange]CLICK YES TO ATTEMPT TO AUTO SWITCH[/COLOR]','[COLOR red]PLEASE DO NOT DO PRESS ANY BUTTONS OR MOVE THE MOUSE WHILE THIS PROCESS IS TAKING PLACE, IT IS AUTOMATIC[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]YOU ARE NOT USING THE DEFAULT SKIN.[/B][/COLOR]','[COLOR orange]Click YES to attempt to AUTO SWITCH the skin[/COLOR]','[COLOR red]Please DO NOT PRESS ANY BUTTONS or MOVE THE MOUSE while the process is taking place, it is AUTOMATIC[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                 if choice == 0:
                         sys.exit(1)
                 skin = 'skin.estuary' if KODIV >= 17 else 'skin.confluence'
@@ -114,14 +114,14 @@ def FRESHSTART():
 
         #CHECK IF THE SKIN IS NOT CONFLUENCE
         if skin not in ['skin.confluence','skin.estuary']:
-                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]ERROR: AUTOSWITCH WAS NOT SUCCESFULL[/B][/COLOR]','[COLOR orange]CLICK YES TO MANUALLY SWITCH TO THE DEFAULT SKIN NOW[/COLOR]','[COLOR red]YOU CAN PRESS NO AND ATTEMPT THE AUTO SWITCH AGAIN IF YOU WISH[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]ERROR: AUTOSWITCH WAS NOT SUCCESFULL[/B][/COLOR]','[COLOR red]Click YES to MANUALLY SWITCH the skin now[/COLOR]','[COLOR red]You can press NO and attempt the AUTO SWITCH again if you wish[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                 if choice == 1:
                         xbmc.executebuiltin("ActivateWindow(appearancesettings)")
                         return
                 else:
                         sys.exit(1)
 
-        dp.create(AddonTitle,"Restoring Kodi.",'In Progress.............', 'Please Wait')
+        dp.create(AddonTitle,"Restoring Kodi.",'In Progress...', 'Please Wait')
         try:
                 for root, dirs, files in os.walk(HOME,topdown=True):
                         dirs[:] = [d for d in dirs if d not in EXCLUDES]
@@ -171,7 +171,7 @@ def WIPERESTORE():
                 else:
                         EXCLUDES_FILES = "  "
 
-        dp.create(AddonTitle,"Restoring Kodi.",'In Progress.............', 'Please Wait')
+        dp.create(AddonTitle,"Restoring Kodi.",'In Progress...', 'Please Wait')
         try:
                 for root, dirs, files in os.walk(HOME,topdown=True):
                         dirs[:] = [d for d in dirs if d not in EXCLUDES]

@@ -16,7 +16,7 @@ class MyOpener(FancyURLopener):
 myopener = MyOpener()
 urlretrieve = MyOpener().retrieve
 urlopen = MyOpener().open
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 USERDATA     =  xbmc.translatePath(os.path.join('special://home/userdata',''))
 CHECKVERSION  =  os.path.join(USERDATA,'version.txt')
 dp = xbmcgui.DialogProgress()
@@ -55,7 +55,7 @@ def check():
                 response = urlopen(SSTwo)
         except:
                 SSUpdate = 1
-                dialog.ok(AddonTitle,'Sorry we are unable to check for [B]SS TV[/B] updates!','The update host appears to be down.','')
+                dialog.ok(AddonTitle,'Sorry we are unable to check for [B]SSTV[/B] updates!','The update host appears to be down.','')
                 xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 
 
@@ -78,7 +78,7 @@ def check():
                                                 try:
                                                         response = urllib2.urlopen(req)
                                                 except:
-                                                        dialog.ok(AddonTitle,'Sorry we are unable to check for [B]SS TV[/B] updates!','The update host appears to be down.','Please check for updates later via the wizard.')
+                                                        dialog.ok(AddonTitle,'Sorry we are unable to check for [B]SSTV[/B] updates!','The update host appears to be down.','Please check for updates later via the wizard.')
                                                         sys.exit(1)		
                                                         xbmc.executebuiltin( "Dialog.Close(busydialog)" )
                                                 link=response.read()

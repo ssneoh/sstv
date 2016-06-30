@@ -18,7 +18,7 @@ ADDON_ID   = 'plugin.program.sswizard'
 ADDON      =  xbmcaddon.Addon(id=ADDON_ID)
 HOME       =  ADDON.getAddonInfo('path')
 addon_name="Speed Test"
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 
 max_Bps = 0.0
 currently_downloaded_bytes = 0.0

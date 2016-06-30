@@ -16,7 +16,7 @@ import wipe
 
 base = 'http://ssneoh.netne.net/sstv/'
 dp           =  xbmcgui.DialogProgress()
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 AddonID ='plugin.program.sswizard'
 selfAddon = xbmcaddon.Addon(id=AddonID)
 backupfull = selfAddon.getSetting('backup_database')

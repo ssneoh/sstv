@@ -8,7 +8,7 @@ import zipfile
 import hashlib
 import skinSwitch
 
-AddonTitle="[COLOR lime]SS[/COLOR] Wizard"
+AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 USERDATA     =  xbmc.translatePath(os.path.join('special://home/userdata',''))
 CHECKVERSION  =  os.path.join(USERDATA,'version.txt')
 skin         =  xbmc.getSkinDir()
@@ -36,7 +36,7 @@ def INSTALL(name,url,description):
 
 	#SWITCH THE SKIN IF THE CURRENT SKIN IS NOT CONFLUENCE
 	if skin not in ['skin.confluence','skin.estuary'] and skipskin == 0:
-		choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]We can see that you are not using the default confluence skin.[/B][/COLOR]','[COLOR red][B]CLICK YES TO ATTEMPT TO AUTO SWITCH TO CONFLUENCE[/B][/COLOR]','[COLOR red][B]PLEASE DO NOT DO PRESS ANY BUTTONS OR MOVE THE MOUSE WHILE THIS PROCESS IS TAKING PLACE, IT IS AUTOMATIC[/B][/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+		choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]YOU ARE NOT USING THE DEFAULT SKIN.[/B][/COLOR]','[COLOR orange]Click YES to attempt to AUTO SWITCH the skin[/COLOR]','[COLOR red]Please DO NOT PRESS ANY BUTTONS or MOVE THE MOUSE while the process is taking place, it is AUTOMATIC[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
 		if choice == 0:
 			sys.exit(1)
 		skin = 'skin.estuary' if KODIV >= 17 else 'skin.confluence'
@@ -65,7 +65,7 @@ def INSTALL(name,url,description):
 
 	#CHECK IF THE SKIN IS NOT CONFLUENCE
 	if skin not in ['skin.confluence','skin.estuary'] and skipskin == 0:
-		choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]ERROR: AUTOSWITCH WAS NOT SUCCESFULL[/B][/COLOR]','[COLOR red][B]CLICK YES TO MANUALLY SWITCH TO CONFLUENCE NOW[/B][/COLOR]','[COLOR red][B]YOU CAN PRESS NO AND ATTEMPT THE AUTO SWITCH AGAIN IF YOU WISH[/B][/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+		choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]ERROR: AUTOSWITCH WAS NOT SUCCESFULL[/B][/COLOR]','[COLOR red]Click YES to MANUALLY SWITCH the skin now[/COLOR]','[COLOR red]You can press NO and attempt the AUTO SWITCH again if you wish[/COLOR]', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
 		if choice == 1:
 			xbmc.executebuiltin("ActivateWindow(appearancesettings)")
 			return

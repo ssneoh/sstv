@@ -30,7 +30,7 @@
         <requires>
             <import addon="xbmc.addon" version="12.0.0"/>
         </requires>
-        <extension point="xbmc.addon.repository" name="[COLOR lime]SS[/COLOR] Repository">
+        <extension point="xbmc.addon.repository" name="[COLOR lime]SS[/COLOR] [COLOR cyan]Repository[/COLOR]">
             <info compressed="false">https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/ssneoh/sstv/master/_repo/</datadir>
