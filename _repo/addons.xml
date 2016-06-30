@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
 <addon id="plugin.program.sswizard"
-	     name="[COLOR lime]SS[/COLOR] Wizard"
+	     name="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 	     version="1.0.0"
 	     provider-name="SSNEOH">
   <requires>
@@ -14,7 +14,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">[COLOR lime]SS[/COLOR] Wizard</summary>
+    <summary lang="en">[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]</summary>
     <description lang="en">Custom builds and tools for KODI. Strictly for [B]PERSONAL USE[/B] only</description>
     <disclaimer lang="en"></disclaimer>
     <language></language>
@@ -26,7 +26,7 @@
   </extension>
 </addon>
 
-    <addon id="repository.ssneoh.kodi" name="[COLOR lime]SS[/COLOR] Repository" version="1.0.0" provider-name="SSNEOH">
+    <addon id="repository.ssneoh.kodi" name="[COLOR lime]SS[/COLOR] [COLOR cyan]Repository[/COLOR]" version="1.0.0" provider-name="SSNEOH">
         <requires>
             <import addon="xbmc.addon" version="12.0.0"/>
         </requires>
