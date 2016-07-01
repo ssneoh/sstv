@@ -43,7 +43,7 @@ def BUILDMENU():
         link = Common.OPEN_URL('http://pastebin.com/raw/Q60AX7Rz').replace('\n','').replace('\r','')
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?ersion="(.+?)"').findall(link)
         for name,url,iconimage,fanart,description in match:
-                Common.addDir(name + " [COLOR gold]Ver:[/COLOR] [COLOR magenta]" + description + "[/COLOR]",url,11,iconimage,fanart,description)
+                Common.addDir(name + " [COLOR gold]Ver:[/COLOR] [COLOR lime]" + description + "[/COLOR]",url,11,iconimage,fanart,description)
 
 
 def maintMenu():
