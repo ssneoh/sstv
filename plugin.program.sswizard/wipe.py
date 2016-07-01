@@ -8,7 +8,7 @@ import skinSwitch
 thumbnailPath = xbmc.translatePath('special://userdata/Thumbnails');
 cachePath = os.path.join(xbmc.translatePath('special://home'), 'cache')
 tempPath = xbmc.translatePath('special://temp')
-addonPath = os.path.join(os.path.join(xbmc.translatePath('special://home'), 'addons'),'plugin.video.tdbwizard')
+addonPath = os.path.join(os.path.join(xbmc.translatePath('special://home'), 'addons'),'plugin.program.sswizard')
 mediaPath = os.path.join(addonPath, 'resources/art')
 databasePath = xbmc.translatePath('special://userdata/Database')
 AddonData = xbmc.translatePath('special://userdata/addon_data')
