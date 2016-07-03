@@ -29,6 +29,7 @@ def Checker():
 	acthursday = plugintools.get_setting("acthursday")
 	acfriday = plugintools.get_setting("acfirday")
 	acsaturday = plugintools.get_setting("acsaturday")
+	acsunday = plugintools.get_setting("acsunday")
 	acsinday = plugintools.get_setting("acsunday")
 	cleaned = 0
 	CLEANEDTODAY = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'resources/cleanedtoday.txt'))
