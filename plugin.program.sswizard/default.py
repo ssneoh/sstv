@@ -14,6 +14,7 @@ import backuprestore
 import base64
 import socket
 import json
+import runner
 
 AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 AddonData = xbmc.translatePath('special://userdata/addon_data')
@@ -22,10 +23,12 @@ ADDON = xbmcaddon.Addon(id=addon_id)
 FANART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id , 'fanart.jpg'))
 ICON = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'icon.png'))
 ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/resources/art/'))
-BASEURL = "http://www.sstv.com"
+BASEURL = "http://ssneoh.site88.net/"
 SpeedTest = "http://pastebin.com/raw/gL8qCbEJ"
+wizard_rel = "http://pastebin.com/raw/Q60AX7Rz"
 
 params=parameters.get_params()
+runner.check()
 
 #######################################################################
 #						ROOT MENU
@@ -40,18 +43,86 @@ def INDEX():
 
 def BUILDMENU():
 
-        link = Common.OPEN_URL('http://pastebin.com/raw/Q60AX7Rz').replace('\n','').replace('\r','')
+        link = Common.OPEN_URL(wizard_rel).replace('\n','').replace('\r','')
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?ersion="(.+?)"').findall(link)
         for name,url,iconimage,fanart,description in match:
                 Common.addDir(name + " [COLOR gold]Ver:[/COLOR] [COLOR lime]" + description + "[/COLOR]",url,11,iconimage,fanart,description)
 
+#######################################################################
+#						MAINTENANCE MENU
+#######################################################################
+
+def get_size(start_path):
+        total_size = 0
+        for dirpath, dirnames, filenames in os.walk(start_path):
+                for f in filenames:
+                        fp = os.path.join(dirpath, f)
+                        total_size += os.path.getsize(fp)
+        return total_size
+
+def convertSize(size):
+        import math
+        if (size == 0):
+                return '[COLOR lime][B]0 MB[/COLOR][/B]'
+        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        i = int(math.floor(math.log(size,1024)))
+        p = math.pow(1024,i)
+        s = round(size/p,2)
+        if size_name == "B" or "KB":
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if size_name == "GB" or "TB" or "PB" or "EB" or "ZB" or "YB":
+                return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s >= 100:
+                return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s < 50:
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s >= 50:
+                if i < 100:
+                        return '[COLOR orange][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
 
 def maintMenu():
 
-        Common.addDir('Auto Clean Device','url',21,ART+'clean.png',FANART,'')
-        Common.addItem('Clear Cache','url',22,ART+'clean.png',FANART,'')
-        Common.addItem('Delete Thumbnails','url',23,ART+'clean.png',FANART,'')
-        Common.addItem('Purge Packages','url',24,ART+'clean.png',FANART,'')
+        CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
+        PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
+        THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+
+        if not os.path.exists(CACHE):
+                CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
+        if not os.path.exists(PACKAGES):
+                os.makedirs(PACKAGES)
+
+        CACHE_SIZE_BYTE    = get_size(CACHE)
+        PACKAGES_SIZE_BYTE = get_size(PACKAGES)
+        THUMB_SIZE_BYTE    = get_size(THUMBS)
+
+        CACHE_SIZE    = convertSize(CACHE_SIZE_BYTE)
+        PACKAGES_SIZE = convertSize(PACKAGES_SIZE_BYTE)
+        THUMB_SIZE    = convertSize(THUMB_SIZE_BYTE)
+
+        startup_clean = plugintools.get_setting("acstartup")
+        weekly_clean = plugintools.get_setting("clearday")
+
+        if startup_clean == "false":
+                startup_onoff = "[COLOR red][B]OFF[/COLOR][/B]"
+        else:
+                startup_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
+        if weekly_clean == "0":
+                weekly_onoff = "[COLOR red][B]OFF[/COLOR][/B]"
+        else:
+                weekly_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
+        
+        Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,29,ART+'system.png',FANART,'')
+        Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,29,ART+'system.png',FANART,'')
+        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]CACHE SIZE: [/COLOR]" + str(CACHE_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]THUMBNAIL SIZE: [/COLOR]" + str(THUMB_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')        
+        
+        Common.addDir('[COLOR white]Auto Clean Device[/COLOR]','url',21,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Clear Cache[/COLOR]','url',22,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Delete Thumbnails[/COLOR]','url',23,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Purge Packages[/COLOR]','url',24,ART+'clean.png',FANART,'')
 
 
 def tools():
@@ -85,6 +156,7 @@ def BACKUPMENU():
         Common.addDir('Restore','url',32,ART+'backuprestore.png',FANART,'')
         Common.addDir('Delete A Backup','url',33,ART+'backuprestore.png',FANART,'')
         Common.addItem('Delete All Backups','url',34,ART+'backuprestore.png',FANART,'')
+        Common.addItem('Select Backup Location','url',29,ART+'backuprestore.png',FANART,'')
 
 #######################################################################
 #                       Compatibility
@@ -101,6 +173,13 @@ def setView(content, viewType):
                 xbmc.executebuiltin("Container.SetViewMode(%s)" % ADDON.getSetting(viewType) )
 
 ##############################    END    #########################################
+                
+#######################################################################
+#					OPEN THE SETTINGS DIALOG
+#######################################################################
+
+def OPEN_SETTINGS(params):
+        plugintools.open_settings_dialog()
 
 #######################################################################
 #						Which mode to select
@@ -162,6 +241,9 @@ elif mode==23:
 elif mode==24:
         maintenance.purgePackages()
 
+elif mode==29:
+        OPEN_SETTINGS(params)
+
 elif mode==30:
         BACKUPMENU()
 
@@ -200,5 +282,33 @@ elif mode==46:
 
 elif mode==47:
         maintenance.DeleteCrashLogs()
+        
+elif mode==100:
+        backuprestore.READ_ZIP(url)
+
+elif mode==101:
+        backuprestore.DeleteBackup(url)
+
+elif mode==102:
+        xbmc.executebuiltin(description)
+        sys.exit(0)
+
+elif mode==103:
+        backuprestore.BACKUP_RD_TRAKT()
+
+elif mode==104:
+        backuprestore.RESTORE_RD_TRAKT()
+
+elif mode==105:
+        backuprestore.READ_ZIP_TRAKT(url)
+
+elif mode==107:
+        backuprestore.TV_GUIDE_BACKUP()
+
+elif mode==108:
+        backuprestore.ADDON_DATA_BACKUP()
+
+elif mode==109:
+        maintenance.RUYA_FIX()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

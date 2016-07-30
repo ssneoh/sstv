@@ -1,82 +1,98 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin,os,base64,sys,xbmcvfs
 import urllib2,urllib
+import shutil
 import zipfile
 import extract
 import downloader
+import maintenance
 import installer
 import re
+import backuprestore
 import time
 import common as Common
 import wipe
+import runner
 import plugintools
 from random import randint
 from datetime import date
 import calendar
 import acdays
 
+my_date = date.today()
+today = calendar.day_name[my_date.weekday()]
 addon_id = 'plugin.program.sswizard'
 USERDATA     =  xbmc.translatePath(os.path.join('special://home/userdata',''))
+SOURCES     =  xbmc.translatePath(os.path.join('special://home/userdata','sources.xml'))
 ADDON     =  xbmc.translatePath(os.path.join('special://home/addons/plugin.program.sswizard',''))
-CHECKVERSION  =  os.path.join(USERDATA,'version.txt')
-PROFILE  =  os.path.join(USERDATA,'profiles.xml')
-LOCK  =  os.path.join(USERDATA,'lock.txt')
-NOTICE  =  os.path.join(ADDON,'notice.txt')
-WIPE  =  xbmc.translatePath('special://home/wipe.xml')
-CLEAN  =  xbmc.translatePath('special://home/clean.xml')
 my_addon = xbmcaddon.Addon()
 dp = xbmcgui.DialogProgress()
-checkver=my_addon.getSetting('checkupdates')
 dialog = xbmcgui.Dialog()
 AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 GoogleOne = "http://www.google.com"
 GoogleTwo = "http://www.google.co.uk"
-SSUpdate = 0
 check = plugintools.get_setting("checkupdates")
 addonupdate = plugintools.get_setting("updaterepos")
-
-my_date = date.today()
-today = calendar.day_name[my_date.weekday()]
-OLD = "[COLOR=white]Device Last Cleaned:[/COLOR]"+"\n"
-NEW = "[COLOR=white]Device Last Cleaned:[/COLOR] " + str(my_date) + " " + today
-automonday = plugintools.get_setting("mondayclean")
-CLEANEDTODAY = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'resources/cleanedtoday.txt'))
-
-acdays.Checker()
-
-SSOne = "http://pastebin.com/raw/85Ct9Jfi"
-SSTwo = "http://pastebin.com/raw/d1DjeFSL"
-
-def Open_URL(url):
-        req      = urllib2.Request(url)
-        req.add_header('User-Agent','TheWizardIsHere')
-        response = urllib2.urlopen(req)
-        link     = response.read()
-        response.close()
-
-        return link.replace('\r','').replace('\n','').replace('\t','')
-
+autoclean = plugintools.get_setting("acstartup")
+CLEAR_CACHE_SIZE = plugintools.get_setting("cachemb")
+CLEAR_PACKAGES_SIZE = plugintools.get_setting("packagesmb")
+CLEAR_THUMBS_SIZE = plugintools.get_setting("thumbsmb")
+BASEURL = 'http://ssneoh.site88.net'
+update_wiz = 'http://pastebin.com/raw/85Ct9Jfi'
+version_check = 'http://pastebin.com/raw/d1DjeFSL'
 nointernet = 0
 
+#Update Information
+SS_VERSION  =  os.path.join(USERDATA,'version.txt')
+HOME         =  xbmc.translatePath('special://home/')
+TMP_TRAKT     =  xbmc.translatePath(os.path.join(HOME,'tmp_trakt'))
+TRAKT_MARKER =  xbmc.translatePath(os.path.join(TMP_TRAKT,'marker.xml'))
+backup_zip = xbmc.translatePath(os.path.join(TMP_TRAKT,'Restore_RD_Trakt_Settings.zip'))
+
+if os.path.isfile(TRAKT_MARKER):
+        choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR lime][B]A backup of your Real Debrid & Trakt settings has been found.[/B][COLOR]','[COLOR red][B]SELECTING NO WILL LOSE ALL SETTINGS[/COLOR][/B]','[COLOR yellow]Do you want to resotre those settings now?[/COLOR]',nolabel='[B][COLOR red]NO[/COLOR][/B]',yeslabel='[B][COLOR lime]YES[/COLOR][/B]')
+        if choice == 1:
+                backuprestore.AUTO_READ_ZIP_TRAKT(backup_zip)
+        else:
+                choice2 = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR red][B]YOU HAVE CHOSEN NOT TO RESTORE YOUR SETTINGS.[/B][/COLOR]','[COLOR red][B]YOU WILL NOT HAVE THIS OPTION AGAIN[/COLOR][/B]','[COLOR red][B]ARE YOU SURE YOU WANT TO COMPLETE THIS ACTION?[/B][/COLOR]',yeslabel='[B][COLOR lime]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+                if choice2 == 0:
+                        backuprestore.AUTO_READ_ZIP_TRAKT(backup_zip)
+                else:
+                        _out = xbmc.translatePath(os.path.join('special://','home/tmp_trakt'))
+                        try:
+                                shutil.rmtree(_out)
+                                shutil.rmdir(_out)
+                        except: pass
+
+runner.check()
+
+#Check Internet Connection
 try:
-        response = Open_URL(GoogleOne)
+        response = Common.OPEN_URL_NORMAL(GoogleOne)
 except:
         try:
-                response = Open_URL(GoogleTwo)
+                response = Common.OPEN_URL_NORMAL(GoogleTwo)
         except:
                 dialog.ok(AddonTitle,'Sorry we are unable to check for updates!','The device is not connected to the internet','Please check your connection settings.')
                 nointernet = 1
                 pass
 
-try:
-        response = Open_URL(SSTwo)
-except:
-        SSUpdate = 1
+#######################################################################
+#						Check for Updates
+#######################################################################
 
-if nointernet == 0 and SSUpdate == 0:
+pleasecheck = 0
+
+#Information for TDB Wizard OTA updates.
+if os.path.exists(SS_VERSION):
+        VERSIONCHECK = SS_VERSION
+        FIND_URL = update_wiz
+        checkurl = version_check
+        pleasecheck = 1
+
+if nointernet == 0 and pleasecheck == 1:
         if check == 'true':
-                if os.path.exists(CHECKVERSION):
-                        checkurl = SSTwo
-                        vers = open(CHECKVERSION, "r")
+                if os.path.exists(VERSIONCHECK):
+                        vers = open(VERSIONCHECK, "r")
                         regex = re.compile(r'<build>(.+?)</build><version>(.+?)</version>')
                         for line in vers:
                                 currversion = regex.findall(line)
@@ -87,7 +103,7 @@ if nointernet == 0 and SSUpdate == 0:
                                                 try:
                                                         response = urllib2.urlopen(req)
                                                 except:
-                                                        dialog.ok(AddonTitle,'Sorry we are unable to check for [B]JARVIS[/B] updates!','The update host appears to be down.','Please check for updates later via the wizard.')							   
+                                                        dialog.ok(AddonTitle,'Sorry we are unable to check for updates!','The update host appears to be down.','Please check for updates later via the wizard.')							   
                                                         sys.exit(1)
 
                                                 link=response.read()
@@ -98,7 +114,7 @@ if nointernet == 0 and SSUpdate == 0:
                                                                 if fresh =='false': # TRUE
                                                                         choice = xbmcgui.Dialog().yesno("NEW UPDATE AVAILABLE", 'Found a new update for the Build', build + " ver: "+newversion, 'Do you want to install it now?', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                                                                         if choice == 1: 
-                                                                                updateurl = SSOne
+                                                                                updateurl = FIND_URL
                                                                                 req = urllib2.Request(updateurl)
                                                                                 req.add_header('User-Agent','TheWizardIsHere')
                                                                                 try:
@@ -134,7 +150,7 @@ if nointernet == 0 and SSUpdate == 0:
                                                                 else:
                                                                         choice = xbmcgui.Dialog().yesno("NEW UPDATE AVAILABLE", 'Found a new update for the Build', build + " ver: "+newversion, 'Do you want to install it now?', yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
                                                                         if choice == 1: 
-                                                                                dialog.ok('[COLOR red]A WIPE is required for the update[/COLOR]','Select the [COLOR green]YES[/COLOR] option in the NEXT WINDOW to wipe now.','Select the [COLOR red]NO[/COLOR] option in the NEXT WINDOW to update later.','[COLOR snow]If you wish to update later you can do so in [/COLOR][COLOR lime]SS[/COLOR] Wizard')
+                                                                                dialog.ok('[COLOR red]A WIPE is required for the update[/COLOR]','Select the [COLOR green]YES[/COLOR] option in the NEXT WINDOW to wipe now.','Select the [COLOR red]NO[/COLOR] option in the NEXT WINDOW to update later.','[COLOR snow]If you wish to update later you can do so in [/COLOR][COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]')
                                                                                 wipe.FRESHSTART()
                                                                         else:
                                                                                 sys.exit(1)
@@ -143,3 +159,65 @@ if addonupdate == 'true':
         #Update all repos and packages.
         xbmc.executebuiltin("UpdateAddonRepos")
         xbmc.executebuiltin("UpdateLocalAddons")
+
+if autoclean == "true":
+        maintenance.Auto_Startup()
+
+CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
+PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
+THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+if not os.path.exists(CACHE):
+        CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
+if not os.path.exists(PACKAGES):
+        os.makedirs(PACKAGES)
+
+if not CLEAR_CACHE_SIZE == "0":
+        if CLEAR_CACHE_SIZE == "1":
+                CACHE_TO_CLEAR = 25
+        if CLEAR_CACHE_SIZE == "2":
+                CACHE_TO_CLEAR = 50
+        if CLEAR_CACHE_SIZE == "3":
+                CACHE_TO_CLEAR = 75
+        if CLEAR_CACHE_SIZE == "4":
+                CACHE_TO_CLEAR = 100
+
+        CACHE_SIZE_BYTE    = Common.get_size(CACHE)
+        CACHE_SIZE    = Common.convertSize(CACHE_SIZE_BYTE)
+
+        if  CACHE_SIZE > CACHE_TO_CLEAR:
+                maintenance.AUTO_CLEAR_CACHE_MB()
+
+if not CLEAR_PACKAGES_SIZE == "0":
+        if CLEAR_PACKAGES_SIZE == "1":
+                PACKAGES_TO_CLEAR = 25
+        if CLEAR_PACKAGES_SIZE == "2":
+                PACKAGES_TO_CLEAR = 50
+        if CLEAR_PACKAGES_SIZE == "3":
+                PACKAGES_TO_CLEAR = 75
+        if CLEAR_PACKAGES_SIZE == "4":
+                PACKAGES_TO_CLEAR = 100
+
+        PACKAGES_SIZE_BYTE    = Common.get_size(PACKAGES)
+        PACKAGES_SIZE    = Common.convertSize(PACKAGES_SIZE_BYTE)
+
+        if PACKAGES_SIZE > PACKAGES_TO_CLEAR:
+                maintenance.AUTO_CLEAR_PACKAGES_MB()
+
+if not CLEAR_THUMBS_SIZE == "0":
+        if CLEAR_THUMBS_SIZE == "1":
+                THUMBS_TO_CLEAR = 25
+        if CLEAR_THUMBS_SIZE == "2":
+                THUMBS_TO_CLEAR = 50
+        if CLEAR_THUMBS_SIZE == "3":
+                THUMBS_TO_CLEAR = 75
+        if CLEAR_THUMBS_SIZE == "4":
+                THUMBS_TO_CLEAR = 100
+
+        THUMBS_SIZE_BYTE    = Common.get_size(THUMBS)
+        THUMBS_SIZE    = Common.convertSize(THUMBS_SIZE_BYTE)
+
+        if  THUMBS_SIZE > THUMBS_TO_CLEAR:
+                maintenance.AUTO_CLEAR_THUMBS_MB()
+
+#Call the daily auto cleaner script.
+acdays.Checker()

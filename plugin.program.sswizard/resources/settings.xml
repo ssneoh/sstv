@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<category label="BUILD UPDATES">
-	<setting id="checkupdates" type="bool" label="Check for build updates on Kodi startup" default="true"/>
-	<setting id="autoupdates" type="bool" label="Auto update build on Kodi startup" default="true"/>
-	<setting id="updaterepos" type="bool" label="Auto update addons and repos on Kodi startup" default="true"/>
+
+    <category label="UPDATES">
+		<setting id="checkupdates" type="bool" label="Check for build updates on Kodi startup" default="true"/>
+		<setting id="autoupdates" type="bool" label="Auto update build on Kodi startup" default="true"/>
+		<setting id="updaterepos" type="bool" label="Auto update addons and repos on Kodi startup" default="true"/>
    	</category>
-	<category label="DEVICE MAINTENANCE">
-		<setting type="lsep" label="[COLOR=dodgerblue]Device Maintenance[/COLOR]"/>
-		<setting type="lsep" label="What Do You Want To Delete?"/>
-		<setting id="accache" type="bool" label="Delete Cache" default="false"/>	
+
+	<category label="MAINTENANCE">
+		<setting type="lsep" label="Launch Time Clean Up"/>
+		<setting id="acstartup" type="bool" label="Clear on Kodi Launch" default="false"/>	
+		<setting type="lsep" label="Clean Up At Certain MB"/>
+		<setting id="cachemb" type="enum" values="Disabled|25 MB|50 MB|75 MB|100 MB" label="Clear Cache At (MB)" default="0"/>
+		<setting id="packagesmb" type="enum" values="Disabled|25 MB|50 MB|75 MB|100 MB" label="Clear Packages At (MB)" default="0"/>
+		<setting id="thumbsmb" type="enum" values="Disabled|25 MB|50 MB|75 MB|100 MB" label="Clear Thumbnails At (MB)" default="0"/>
+		<setting type="lsep" label="Weekly Clean Out"/>
+		<setting id="clearday" type="enum" values="None|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday" label="Clean Out Day" default="0"/>
+		<setting type="lsep" label="Clean Up Options"/>
+		<setting id="accache" type="bool" label="Clear Cache" default="false"/>	
+		<setting id="accrash" type="bool" label="Clear Crash Logs" default="false"/>	
+		<setting id="acthumbs" type="bool" label="Clear Thumbnails" default="false"/>	
 		<setting id="acpackages" type="bool" label="Purge Packages" default="false"/>	
-		<setting id="accrash" type="bool" label="Delete Crash Logs" default="false"/>	
-		<setting id="acthumbs" type="bool" label="Delete Thumbnails" default="false"/>	
-		<setting type="lsep" label="When Do You Want To Do This?"/>
-		<setting id="acmonday" type="bool" label="Every Monday" default="false"/>	
-		<setting id="actuesday" type="bool" label="Every Tuesday" default="false"/>	
-		<setting id="acwednesday" type="bool" label="Every Wednesday" default="false"/>	
-		<setting id="acthursday" type="bool" label="Every Thursday" default="false"/>	
-		<setting id="acfriday" type="bool" label="Every Friday" default="false"/>	
-		<setting id="acsaturday" type="bool" label="Every Saturday" default="false"/>	
-		<setting id="acsunday" type="bool" label="Every Sunday" default="false"/>	
    	</category>
+	
 	<category label="BACKUPS">
 		<setting type="lsep" label="[COLOR=dodgerblue]Backups[/COLOR]"/>
-		<setting id="zip" type="folder"    label="Choose Backup Storage Location:"      default="special://home/backupdir"/>
+		<setting id="zip" type="folder" label="Choose Backup Storage Location:" default="special://home/backupdir"/>
    	</category>
+	
+	<!--
 	<category label="LOGS">
 		<setting type="lsep" label="[COLOR=dodgerblue]Log Settings[/COLOR]"/>
 		<setting id="email" type="text" label="E-Mail Address:"/>
 		<setting id="skip_oldlog" type="bool" label="Skip Old Log On Upload" default="true"/>	
 	</category>
+	-->
+	
 </settings>
