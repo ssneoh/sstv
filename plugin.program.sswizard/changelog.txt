@@ -3,3 +3,6 @@ First Release
 
 v1.0.1
 Improved maintenance section
+
+v1.0.2
+Fixed settings section

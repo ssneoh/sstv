@@ -3,7 +3,7 @@
 
     <category label="UPDATES">
 		<setting id="checkupdates" type="bool" label="Check for build updates on Kodi startup" default="true"/>
-		<setting id="autoupdates" type="bool" label="Auto update build on Kodi startup" default="true"/>
+		<!--<setting id="autoupdates" type="bool" label="Auto update build on Kodi startup" default="true"/>-->
 		<setting id="updaterepos" type="bool" label="Auto update addons and repos on Kodi startup" default="true"/>
    	</category>
 
