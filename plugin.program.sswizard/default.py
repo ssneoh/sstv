@@ -274,6 +274,7 @@ def setView(content, viewType):
 
 def OPEN_SETTINGS(params):
         plugintools.open_settings_dialog()
+        xbmc.executebuiltin("Container.Refresh")
 
 #######################################################################
 #						Which mode to select
