@@ -1,8 +1,10 @@
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin,os,base64,sys,xbmcvfs
 import platform
 import urllib2,urllib
+from urllib import FancyURLopener
 import re
 import speedtest
+import glob
 import common as Common
 import wipe
 import installer
@@ -15,6 +17,7 @@ import base64
 import socket
 import json
 import runner
+
 
 AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 AddonData = xbmc.translatePath('special://userdata/addon_data')
@@ -68,39 +71,92 @@ def convertSize(size):
         i = int(math.floor(math.log(size,1024)))
         p = math.pow(1024,i)
         s = round(size/p,2)
-        if size_name == "B" or "KB":
+        if size_name[i] == "B":
                 return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
-        if size_name == "GB" or "TB" or "PB" or "EB" or "ZB" or "YB":
+        if size_name[i] == "KB":
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if size_name[i] == "GB":
                 return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
-        if s >= 100:
+        if size_name[i] == "TB":
                 return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
         if s < 50:
                 return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
         if s >= 50:
-                if i < 100:
+                if s < 100:
                         return '[COLOR orange][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s >= 100:
+                return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+
+def convertSizeInstall(size):
+        import math
+        if (size == 0):
+                return '[COLOR lime][B]0 MB[/COLOR][/B]'
+        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        i = int(math.floor(math.log(size,1024)))
+        p = math.pow(1024,i)
+        s = round(size/p,2)
+        if size_name[i] == "B":
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if size_name[i] == "KB":
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if size_name[i] == "TB":
+                return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s < 1000:
+                return '[COLOR lime][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s >= 1000:
+                if s < 1500:
+                        return '[COLOR orange][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
+        if s >= 1500:
+                return '[COLOR red][B]%s %s' % (s,size_name[i]) + '[/COLOR][/B]'
 
 def maintMenu():
 
-        CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
-        PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
-        THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+        HOME          =  xbmc.translatePath('special://home/')
+        PACKAGES      =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
+        THUMBS        =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+        CACHE_FOLDER  =  xbmc.translatePath(os.path.join('special://home','cache'))
+        TEMP_FOLDER   =  xbmc.translatePath(os.path.join('special://','temp'))
+        CACHE         =  "NULL"
 
-        if not os.path.exists(CACHE):
-                CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
+        if os.path.exists(CACHE_FOLDER):
+                CACHE = CACHE_FOLDER
+
+        if os.path.exists(TEMP_FOLDER):
+                CACHE = TEMP_FOLDER
+
         if not os.path.exists(PACKAGES):
                 os.makedirs(PACKAGES)
 
-        CACHE_SIZE_BYTE    = get_size(CACHE)
-        PACKAGES_SIZE_BYTE = get_size(PACKAGES)
-        THUMB_SIZE_BYTE    = get_size(THUMBS)
+        if CACHE == "NULL":
+                try:
+                        PACKAGES_SIZE_BYTE = get_size(PACKAGES)
+                        THUMB_SIZE_BYTE    = get_size(THUMBS)
+                except: pass
+        else:
+                try:
+                        CACHE_SIZE_BYTE    = get_size(CACHE)
+                        PACKAGES_SIZE_BYTE = get_size(PACKAGES)
+                        THUMB_SIZE_BYTE    = get_size(THUMBS)
+                except: pass
 
-        CACHE_SIZE    = convertSize(CACHE_SIZE_BYTE)
-        PACKAGES_SIZE = convertSize(PACKAGES_SIZE_BYTE)
-        THUMB_SIZE    = convertSize(THUMB_SIZE_BYTE)
+        if CACHE == "NULL":
+                try:
+                        PACKAGES_SIZE = convertSize(PACKAGES_SIZE_BYTE)
+                        THUMB_SIZE    = convertSize(THUMB_SIZE_BYTE)
+                except: pass
+        else:
+                try:
+                        CACHE_SIZE    = convertSize(CACHE_SIZE_BYTE)
+                        PACKAGES_SIZE = convertSize(PACKAGES_SIZE_BYTE)
+                        THUMB_SIZE    = convertSize(THUMB_SIZE_BYTE)
+                except: pass
+
+        if CACHE == "NULL":
+                CACHE_SIZE    =  "[COLOR red][B]ERROR READING CACHE[/B][/COLOR]"
 
         startup_clean = plugintools.get_setting("acstartup")
         weekly_clean = plugintools.get_setting("clearday")
+        sizecheck_clean = plugintools.get_setting("startupsize")
 
         if startup_clean == "false":
                 startup_onoff = "[COLOR red][B]OFF[/COLOR][/B]"
@@ -110,9 +166,47 @@ def maintMenu():
                 weekly_onoff = "[COLOR red][B]OFF[/COLOR][/B]"
         else:
                 weekly_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
+        if sizecheck_clean == "false":
+                sizecheck_onoff = "[COLOR red][B]OFF[/COLOR][/B]"
+        else:
+                sizecheck_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
+
+        cachePath = os.path.join(xbmc.translatePath('special://home'), 'cache')
+        tempPath = os.path.join(xbmc.translatePath('special://home'), 'temp')
+        WindowsCache = xbmc.translatePath('special://home')
+        i = 0
+
+        if os.path.exists(tempPath):
+                for root, dirs, files in os.walk(tempPath,topdown=True):
+                        dirs[:] = [d for d in dirs]
+                        for name in files:
+                                if ".old.log" not in name.lower():
+                                        if ".log" in name.lower():
+                                                a=open((os.path.join(root, name))).read()	
+                                                b=a.replace('\n','NEW_L').replace('\r','NEW_R')
+                                                match = re.compile('EXCEPTION Thrown(.+?)End of Python script error report').findall(b)
+                                                for checker in match:
+                                                        i = i + 1
+
+        if os.path.exists(WindowsCache):
+                for root, dirs, files in os.walk(WindowsCache,topdown=True):
+                        dirs[:] = [d for d in dirs]
+                        for name in files:
+                                if ".old.log" not in name.lower():
+                                        if ".log" in name.lower():
+                                                a=open((os.path.join(root, name))).read()	
+                                                b=a.replace('\n','NEW_L').replace('\r','NEW_R')
+                                                match = re.compile('EXCEPTION Thrown(.+?)End of Python script error report').findall(b)
+                                                for checker in match:
+                                                        i = i + 1
+
+        if i == 0:
+                ERRORS_IN_LOG = "[COLOR lime][B]0 ERRORS FOUND IN LOG[/B][/COLOR]"
+        else:
+                ERRORS_IN_LOG = "[COLOR red][B]" + str(i) + " ERRORS FOUND IN LOG[/B][/COLOR]"
         
-        Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,29,ART+'system.png',FANART,'')
         Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,29,ART+'system.png',FANART,'')
+        Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,29,ART+'system.png',FANART,'')
         Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR white]CACHE SIZE: [/COLOR]" + str(CACHE_SIZE),BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
@@ -310,5 +404,11 @@ elif mode==108:
 
 elif mode==109:
         maintenance.RUYA_FIX()
+        
+elif mode==110:
+        maintenance.AUTO_CLEAN_ON_OFF()
+
+elif mode==111:
+        maintenance.AUTO_WEEKLY_CLEAN_ON_OFF()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -4,12 +4,15 @@
     <category label="UPDATES">
 		<setting id="checkupdates" type="bool" label="Check for build updates on Kodi startup" default="true"/>
 		<!--<setting id="autoupdates" type="bool" label="Auto update build on Kodi startup" default="true"/>-->
+		<!--<setting id="checkaddonupdates" type="bool" label="Check for Wizard and Repository updates on launch." default="true"/>	-->
 		<setting id="updaterepos" type="bool" label="Auto update addons and repos on Kodi startup" default="true"/>
    	</category>
 
 	<category label="MAINTENANCE">
 		<setting type="lsep" label="Launch Time Clean Up"/>
-		<setting id="acstartup" type="bool" label="Clear on Kodi Launch" default="false"/>	
+		<setting id="acstartup" type="bool" label="Clear on Kodi Launch" default="false"/>
+		<setting type="lsep" label="Check Cache, Packages Etc And Prompt To Clean If Over 100 MB."/>
+		<setting id="startupsize" type="bool" label="Check Folder Sizes on Launch" default="false"/>	
 		<setting type="lsep" label="Clean Up At Certain MB"/>
 		<setting id="cachemb" type="enum" values="Disabled|25 MB|50 MB|75 MB|100 MB" label="Clear Cache At (MB)" default="0"/>
 		<setting id="packagesmb" type="enum" values="Disabled|25 MB|50 MB|75 MB|100 MB" label="Clear Packages At (MB)" default="0"/>
@@ -17,10 +20,10 @@
 		<setting type="lsep" label="Weekly Clean Out"/>
 		<setting id="clearday" type="enum" values="None|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday" label="Clean Out Day" default="0"/>
 		<setting type="lsep" label="Clean Up Options"/>
-		<setting id="accache" type="bool" label="Clear Cache" default="false"/>	
-		<setting id="accrash" type="bool" label="Clear Crash Logs" default="false"/>	
-		<setting id="acthumbs" type="bool" label="Clear Thumbnails" default="false"/>	
-		<setting id="acpackages" type="bool" label="Purge Packages" default="false"/>	
+		<setting id="accache" type="bool" label="Clear Cache" default="true"/>	
+		<setting id="accrash" type="bool" label="Clear Crash Logs" default="true"/>	
+		<setting id="acthumbs" type="bool" label="Clear Thumbnails" default="true"/>	
+		<setting id="acpackages" type="bool" label="Purge Packages" default="true"/>	
    	</category>
 	
 	<category label="BACKUPS">

@@ -32,6 +32,7 @@ GoogleOne = "http://www.google.com"
 GoogleTwo = "http://www.google.co.uk"
 check = plugintools.get_setting("checkupdates")
 addonupdate = plugintools.get_setting("updaterepos")
+size_check = plugintools.get_setting("startupsize")
 autoclean = plugintools.get_setting("acstartup")
 CLEAR_CACHE_SIZE = plugintools.get_setting("cachemb")
 CLEAR_PACKAGES_SIZE = plugintools.get_setting("packagesmb")
@@ -82,7 +83,7 @@ except:
 
 pleasecheck = 0
 
-#Information for TDB Wizard OTA updates.
+#Information for SS Wizard OTA updates.
 if os.path.exists(SS_VERSION):
         VERSIONCHECK = SS_VERSION
         FIND_URL = update_wiz
@@ -160,64 +161,97 @@ if addonupdate == 'true':
         xbmc.executebuiltin("UpdateAddonRepos")
         xbmc.executebuiltin("UpdateLocalAddons")
 
-if autoclean == "true":
-        maintenance.Auto_Startup()
-
-CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
-PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
-THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
-if not os.path.exists(CACHE):
-        CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
-if not os.path.exists(PACKAGES):
-        os.makedirs(PACKAGES)
-
-if not CLEAR_CACHE_SIZE == "0":
-        if CLEAR_CACHE_SIZE == "1":
-                CACHE_TO_CLEAR = 25
-        if CLEAR_CACHE_SIZE == "2":
-                CACHE_TO_CLEAR = 50
-        if CLEAR_CACHE_SIZE == "3":
-                CACHE_TO_CLEAR = 75
-        if CLEAR_CACHE_SIZE == "4":
-                CACHE_TO_CLEAR = 100
-
-        CACHE_SIZE_BYTE    = Common.get_size(CACHE)
-        CACHE_SIZE    = Common.convertSize(CACHE_SIZE_BYTE)
-
-        if  CACHE_SIZE > CACHE_TO_CLEAR:
-                maintenance.AUTO_CLEAR_CACHE_MB()
-
-if not CLEAR_PACKAGES_SIZE == "0":
-        if CLEAR_PACKAGES_SIZE == "1":
-                PACKAGES_TO_CLEAR = 25
-        if CLEAR_PACKAGES_SIZE == "2":
-                PACKAGES_TO_CLEAR = 50
-        if CLEAR_PACKAGES_SIZE == "3":
-                PACKAGES_TO_CLEAR = 75
-        if CLEAR_PACKAGES_SIZE == "4":
-                PACKAGES_TO_CLEAR = 100
-
-        PACKAGES_SIZE_BYTE    = Common.get_size(PACKAGES)
-        PACKAGES_SIZE    = Common.convertSize(PACKAGES_SIZE_BYTE)
-
-        if PACKAGES_SIZE > PACKAGES_TO_CLEAR:
-                maintenance.AUTO_CLEAR_PACKAGES_MB()
-
-if not CLEAR_THUMBS_SIZE == "0":
-        if CLEAR_THUMBS_SIZE == "1":
-                THUMBS_TO_CLEAR = 25
-        if CLEAR_THUMBS_SIZE == "2":
-                THUMBS_TO_CLEAR = 50
-        if CLEAR_THUMBS_SIZE == "3":
-                THUMBS_TO_CLEAR = 75
-        if CLEAR_THUMBS_SIZE == "4":
-                THUMBS_TO_CLEAR = 100
-
-        THUMBS_SIZE_BYTE    = Common.get_size(THUMBS)
-        THUMBS_SIZE    = Common.convertSize(THUMBS_SIZE_BYTE)
-
-        if  THUMBS_SIZE > THUMBS_TO_CLEAR:
-                maintenance.AUTO_CLEAR_THUMBS_MB()
-
-#Call the daily auto cleaner script.
-acdays.Checker()
+        if autoclean == "true":
+                maintenance.Auto_Startup()
+        
+        CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
+        PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
+        THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+        
+        if not os.path.exists(CACHE):
+                CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
+        if not os.path.exists(PACKAGES):
+                os.makedirs(PACKAGES)
+        
+        if not CLEAR_CACHE_SIZE == "0":
+                if CLEAR_CACHE_SIZE == "1":
+                        CACHE_TO_CLEAR = 25000000
+                if CLEAR_CACHE_SIZE == "2":
+                        CACHE_TO_CLEAR = 50000000
+                if CLEAR_CACHE_SIZE == "3":
+                        CACHE_TO_CLEAR = 75000000
+                if CLEAR_CACHE_SIZE == "4":
+                        CACHE_TO_CLEAR = 100000000
+        
+                CACHE_SIZE_BYTE    = Common.get_size(CACHE)
+        
+                if  CACHE_SIZE_BYTE > CACHE_TO_CLEAR:
+                        maintenance.AUTO_CLEAR_CACHE_MB()
+        
+        if not CLEAR_PACKAGES_SIZE == "0":
+                if CLEAR_PACKAGES_SIZE == "1":
+                        PACKAGES_TO_CLEAR = 25000000
+                if CLEAR_PACKAGES_SIZE == "2":
+                        PACKAGES_TO_CLEAR = 50000000
+                if CLEAR_PACKAGES_SIZE == "3":
+                        PACKAGES_TO_CLEAR = 75000000
+                if CLEAR_PACKAGES_SIZE == "4":
+                        PACKAGES_TO_CLEAR = 100000000
+        
+                PACKAGES_SIZE_BYTE    = Common.get_size(PACKAGES)
+        
+                if PACKAGES_SIZE_BYTE > PACKAGES_TO_CLEAR:
+                        if not xbmc.getCondVisibility("Window.isVisible(ProgressDialog)"):
+                                maintenance.AUTO_CLEAR_PACKAGES_MB()
+        
+        if not CLEAR_THUMBS_SIZE == "0":
+                if CLEAR_THUMBS_SIZE == "1":
+                        THUMBS_TO_CLEAR = 25000000
+                if CLEAR_THUMBS_SIZE == "2":
+                        THUMBS_TO_CLEAR = 50000000
+                if CLEAR_THUMBS_SIZE == "3":
+                        THUMBS_TO_CLEAR = 75000000
+                if CLEAR_THUMBS_SIZE == "4":
+                        THUMBS_TO_CLEAR = 100000000
+        
+                THUMBS_SIZE_BYTE    = Common.get_size(THUMBS)
+        
+                if  THUMBS_SIZE_BYTE > THUMBS_TO_CLEAR:
+                        maintenance.AUTO_CLEAR_THUMBS_MB()
+        
+        if size_check == "true":
+        
+                CACHE_SIZE_BYTE    = Common.get_size(CACHE)
+                PACKAGES_SIZE_BYTE    = Common.get_size(PACKAGES)
+                THUMBS_SIZE_BYTE    = Common.get_size(THUMBS)
+        
+                if CACHE_SIZE_BYTE >= 100000000:
+                        choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR smokewhite]Your Cache is now over 100 MB[/COLOR]','This is high and we recommend you clear it now.','[COLOR lightskyblue][B]WOULD YOU LIKE TO CLEAR THE CACHE NOW?[/COLOR][/B]', yeslabel='[COLOR green][B]YES[/B][/COLOR]',nolabel='[COLOR lightskyblue][B]NO[/B][/COLOR]')
+                        if choice == 1: 
+                                xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+                                maintenance.AUTO_CLEAR_CACHE_MB()
+                                xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+                                dialog = xbmcgui.Dialog()
+                                dialog.ok(AddonTitle, "Your cache has been successfully cleared.","Thank you for using SS Wizard")							
+        
+                if PACKAGES_SIZE_BYTE >= 1000000000:
+                        if not xbmc.getCondVisibility("Window.isVisible(ProgressDialog)"):
+                                choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR smokewhite]Your Packages folder is now over 1 GB[/COLOR]','This is high and we recommend you clear it now.','[COLOR lightskyblue][B]WOULD YOU LIKE TO PURGE THE PACKAGES NOW?[/COLOR][/B]', yeslabel='[COLOR green][B]YES[/B][/COLOR]',nolabel='[COLOR lightskyblue][B]NO[/B][/COLOR]')
+                                if choice == 1:
+                                        xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+                                        maintenance.AUTO_CLEAR_PACKAGES_MB()
+                                        xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+                                        dialog = xbmcgui.Dialog()
+                                        dialog.ok(AddonTitle, "Your packages have been successfully purged.","Thank you for using SS Wizard")							
+        
+                if THUMBS_SIZE_BYTE >= 300000000:
+                        choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR smokewhite]Your Thumbnails are now over 300 MB[/COLOR]','This is high and we recommend you clear it now.','[COLOR lightskyblue][B]WOULD YOU LIKE TO CLEAR THE THUMBNAILS NOW?[/COLOR][/B]', yeslabel='[COLOR green][B]YES[/B][/COLOR]',nolabel='[COLOR lightskyblue][B]NO[/B][/COLOR]')
+                        if choice == 1: 
+                                xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+                                maintenance.AUTO_CLEAR_THUMBS_MB()
+                                xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+                                dialog = xbmcgui.Dialog()
+                                dialog.ok(AddonTitle, "Your thumbnails have been successfully cleared.","Thank you for using SS Wizard")							
+        
+        #Call the daily auto cleaner script.
+        acdays.Checker()
