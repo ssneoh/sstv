@@ -232,7 +232,7 @@ if addonupdate == 'true':
                                 maintenance.AUTO_CLEAR_CACHE_MB()
                                 xbmc.executebuiltin( "Dialog.Close(busydialog)" )
                                 dialog = xbmcgui.Dialog()
-                                dialog.ok(AddonTitle, "Your cache has been successfully cleared.","Thank you for using SS Wizard")							
+                                dialog.ok(AddonTitle, "Your cache has been successfully cleared.","")							
         
                 if PACKAGES_SIZE_BYTE >= 1000000000:
                         if not xbmc.getCondVisibility("Window.isVisible(ProgressDialog)"):
@@ -242,7 +242,7 @@ if addonupdate == 'true':
                                         maintenance.AUTO_CLEAR_PACKAGES_MB()
                                         xbmc.executebuiltin( "Dialog.Close(busydialog)" )
                                         dialog = xbmcgui.Dialog()
-                                        dialog.ok(AddonTitle, "Your packages have been successfully purged.","Thank you for using SS Wizard")							
+                                        dialog.ok(AddonTitle, "Your packages have been successfully purged.","")							
         
                 if THUMBS_SIZE_BYTE >= 300000000:
                         choice = xbmcgui.Dialog().yesno(AddonTitle, '[COLOR smokewhite]Your Thumbnails are now over 300 MB[/COLOR]','This is high and we recommend you clear it now.','[COLOR lightskyblue][B]WOULD YOU LIKE TO CLEAR THE THUMBNAILS NOW?[/COLOR][/B]', yeslabel='[COLOR green][B]YES[/B][/COLOR]',nolabel='[COLOR lightskyblue][B]NO[/B][/COLOR]')
@@ -251,7 +251,7 @@ if addonupdate == 'true':
                                 maintenance.AUTO_CLEAR_THUMBS_MB()
                                 xbmc.executebuiltin( "Dialog.Close(busydialog)" )
                                 dialog = xbmcgui.Dialog()
-                                dialog.ok(AddonTitle, "Your thumbnails have been successfully cleared.","Thank you for using SS Wizard")							
+                                dialog.ok(AddonTitle, "Your thumbnails have been successfully cleared.","")							
         
         #Call the daily auto cleaner script.
         acdays.Checker()

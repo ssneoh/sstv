@@ -9,3 +9,6 @@ Fixed settings section
 
 v1.0.3
 Clean up some codes
+
+v1.0.4
+Fixed maintenance codes

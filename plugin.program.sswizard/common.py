@@ -365,16 +365,37 @@ def platform():
 
 def REMOVE_EMPTY_FOLDERS():
 #initialize the counters
-        print"########### Start Removing Empty Folders #########"
-        empty_count = 0
-        used_count = 0
-        for curdir, subdirs, files in os.walk(HOME):
-                if len(subdirs) == 0 and len(files) == 0: #check for empty directories. len(files) == 0 may be overkill
-                        empty_count += 1 #increment empty_count
-                        os.rmdir(curdir) #delete the directory
-                        print "successfully removed: "+curdir
-                elif len(subdirs) > 0 and len(files) > 0: #check for used directories
-                        used_count += 1 #increment 
+	print"########### Start Removing Empty Folders #########"
+	empty_count = 0
+	used_count = 0
+	try:
+		for curdir, subdirs, files in os.walk(HOME):
+			if len(subdirs) == 0 and len(files) == 0: #check for empty directories. len(files) == 0 may be overkill
+				empty_count += 1 #increment empty_count
+				os.rmdir(curdir) #delete the directory
+				print "successfully removed: "+curdir
+			elif len(subdirs) > 0 and len(files) > 0: #check for used directories
+				used_count += 1 #increment 
+	except: pass
+
+def REMOVE_EMPTY_FOLDERS_BUILDS():
+#initialize the counters
+	print"########### Start Removing Empty Folders #########"
+	empty_count = 0
+	used_count = 0
+	
+	EXCLUDES = ['Thumbnails']
+
+	try:
+		for dirs, subdirs, files in os.walk(HOME,topdown=True):
+			subdirs[:] = [d for d in subdirs if d not in EXCLUDES]
+			if len(subdirs) == 0 and len(files) == 0: #check for empty directories. len(files) == 0 may be overkill
+				empty_count += 1 #increment empty_count
+				os.rmdir(dirs) #delete the directory
+				print "successfully removed: "+dirs
+			elif len(subdirs) > 0 and len(files) > 0: #check for used directories
+				used_count += 1 #increment 
+	except: pass
 
 ###############################################################
 ###FORCE CLOSE KODI - ANDROID ONLY WORKS IF ROOTED#############

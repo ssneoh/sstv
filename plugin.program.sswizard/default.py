@@ -17,6 +17,7 @@ import base64
 import socket
 import json
 import runner
+import shutil
 
 
 AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
@@ -30,8 +31,22 @@ BASEURL = "http://ssneoh.site88.net/"
 SpeedTest = "http://pastebin.com/raw/gL8qCbEJ"
 wizard_rel = "http://pastebin.com/raw/Q60AX7Rz"
 
+DEFAULT_SETTINGS    =  xbmc.translatePath(os.path.join('special://home/addons/' + addon_id,'resources/settings_default.xml'))
+ADDON_DATA          =  xbmc.translatePath(os.path.join('special://home/userdata/addon_data/' + addon_id))
+USER_SETTINGS       =  xbmc.translatePath(os.path.join('special://home/userdata/addon_data/' + addon_id,'settings.xml'))
+
+
 params=parameters.get_params()
 runner.check()
+
+#######################################################################
+#			CREATE USER SETTINGS XML IF IT DOES NOT EXIST
+#######################################################################
+
+if not os.path.isfile(USER_SETTINGS):
+	if not os.path.exists(ADDON_DATA):
+		os.makedirs(ADDON_DATA)
+	shutil.copyfile(DEFAULT_SETTINGS, USER_SETTINGS)
 
 #######################################################################
 #						ROOT MENU
@@ -171,6 +186,23 @@ def maintMenu():
         else:
                 sizecheck_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
 
+        
+        Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,110,ART+'system.png',FANART,'')
+        Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,111,ART+'system.png',FANART,'')
+        Common.addItem('[COLOR dodgerblue]Setup Auto Clear At Specific MB - [/COLOR]' + sizecheck_onoff,BASEURL,29,ART+'system.png',FANART,'')
+        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]CACHE SIZE: [/COLOR]" + str(CACHE_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR white]THUMBNAIL SIZE: [/COLOR]" + str(THUMB_SIZE),BASEURL,'',ICON,FANART,'')
+        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')        
+        Common.addDir('[COLOR white]Auto Clean Device[/COLOR]','url',21,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Clear Cache[/COLOR]','url',22,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Delete Thumbnails[/COLOR]','url',23,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Purge Packages[/COLOR]','url',24,ART+'clean.png',FANART,'')
+
+        
+def tools():
+
         cachePath = os.path.join(xbmc.translatePath('special://home'), 'cache')
         tempPath = os.path.join(xbmc.translatePath('special://home'), 'temp')
         WindowsCache = xbmc.translatePath('special://home')
@@ -182,7 +214,7 @@ def maintMenu():
                         for name in files:
                                 if ".old.log" not in name.lower():
                                         if ".log" in name.lower():
-                                                a=open((os.path.join(root, name))).read()	
+                                                a=open((os.path.join(root, name))).read()       
                                                 b=a.replace('\n','NEW_L').replace('\r','NEW_R')
                                                 match = re.compile('EXCEPTION Thrown(.+?)End of Python script error report').findall(b)
                                                 for checker in match:
@@ -194,7 +226,7 @@ def maintMenu():
                         for name in files:
                                 if ".old.log" not in name.lower():
                                         if ".log" in name.lower():
-                                                a=open((os.path.join(root, name))).read()	
+                                                a=open((os.path.join(root, name))).read()       
                                                 b=a.replace('\n','NEW_L').replace('\r','NEW_R')
                                                 match = re.compile('EXCEPTION Thrown(.+?)End of Python script error report').findall(b)
                                                 for checker in match:
@@ -204,31 +236,20 @@ def maintMenu():
                 ERRORS_IN_LOG = "[COLOR lime][B]0 ERRORS FOUND IN LOG[/B][/COLOR]"
         else:
                 ERRORS_IN_LOG = "[COLOR red][B]" + str(i) + " ERRORS FOUND IN LOG[/B][/COLOR]"
-        
-        Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,29,ART+'system.png',FANART,'')
-        Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,29,ART+'system.png',FANART,'')
-        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')
-        Common.addItem("[COLOR white]CACHE SIZE: [/COLOR]" + str(CACHE_SIZE),BASEURL,'',ICON,FANART,'')
-        Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
-        Common.addItem("[COLOR white]THUMBNAIL SIZE: [/COLOR]" + str(THUMB_SIZE),BASEURL,'',ICON,FANART,'')
-        Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')        
-        
-        Common.addDir('[COLOR white]Auto Clean Device[/COLOR]','url',21,ART+'clean.png',FANART,'')
-        Common.addItem('[COLOR white]Clear Cache[/COLOR]','url',22,ART+'clean.png',FANART,'')
-        Common.addItem('[COLOR white]Delete Thumbnails[/COLOR]','url',23,ART+'clean.png',FANART,'')
-        Common.addItem('[COLOR white]Purge Packages[/COLOR]','url',24,ART+'clean.png',FANART,'')
 
-
-def tools():
 
         Common.addItem('Convert Physical Paths To Special','url',41,ART+'convert.png',FANART,'')
         Common.addItem('Check For Updates',BASEURL,42,ART+'update.png',FANART,'')
         Common.addItem('View Current or Old Log File','url',46,ART+'log.png',FANART,'')
+        Common.addItem('View The Last Error In Log File','url',48,ART+'log.png',FANART,'')
+        Common.addItem('View All ' + str(i) + ' Errors In Log File','url',49,ART+'log.png',FANART,'')
         Common.addItem('Delete Crash Logs','url',47,ART+'log.png',FANART,'')
+        #Common.addItem('Check for Broken Repositories','url',50,ART+'tool.png',FANART,'')
+        #Common.addItem('Check for Broken Sources in sources.xml','url',51,ART+'tool.png',FANART,'')
         Common.addDir('Speed Test',BASEURL,43,ART+'speed.png',FANART,'')
         Common.addDir('System Reset [COLOR red](CAUTION)[/COLOR]','url',44,ART+'systemreset.png',FANART,'')
 
-
+        
 #######################################################################
 #						SPEEDTEST LIST
 #######################################################################
@@ -377,6 +398,18 @@ elif mode==46:
 
 elif mode==47:
         maintenance.DeleteCrashLogs()
+
+elif mode==48:
+        maintenance.view_LastError()
+
+elif mode==49:
+        maintenance.viewErrors()
+
+elif mode==50:
+        maintenance.CHECK_BROKEN_REPOS()
+
+elif mode==51:
+        maintenance.CHECK_BROKEN_SOURCES()
         
 elif mode==100:
         backuprestore.READ_ZIP(url)
