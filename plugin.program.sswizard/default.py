@@ -189,7 +189,7 @@ def maintMenu():
         
         Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,110,ART+'system.png',FANART,'')
         Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,111,ART+'system.png',FANART,'')
-        Common.addItem('[COLOR dodgerblue]Setup Auto Clear At Specific MB - [/COLOR]' + sizecheck_onoff,BASEURL,29,ART+'system.png',FANART,'')
+        Common.addItem('[COLOR dodgerblue]Auto Clear At Specific MB - [/COLOR]' + sizecheck_onoff,BASEURL,29,ART+'system.png',FANART,'')
         Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR white]CACHE SIZE: [/COLOR]" + str(CACHE_SIZE),BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
