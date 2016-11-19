@@ -18,7 +18,7 @@ import socket
 import json
 import runner
 import shutil
-
+import requests
 
 AddonTitle="[COLOR lime]SS[/COLOR] [COLOR cyan]Wizard[/COLOR]"
 AddonData = xbmc.translatePath('special://userdata/addon_data')
@@ -44,9 +44,9 @@ runner.check()
 #######################################################################
 
 if not os.path.isfile(USER_SETTINGS):
-	if not os.path.exists(ADDON_DATA):
-		os.makedirs(ADDON_DATA)
-	shutil.copyfile(DEFAULT_SETTINGS, USER_SETTINGS)
+        if not os.path.exists(ADDON_DATA):
+                os.makedirs(ADDON_DATA)
+        shutil.copyfile(DEFAULT_SETTINGS, USER_SETTINGS)
 
 #######################################################################
 #						ROOT MENU
@@ -186,7 +186,7 @@ def maintMenu():
         else:
                 sizecheck_onoff = "[COLOR lime][B]ON[/COLOR][/B]"
 
-        
+
         Common.addItem('[COLOR dodgerblue]Auto Clean On Startup - [/COLOR]' + startup_onoff,BASEURL,110,ART+'system.png',FANART,'')
         Common.addItem('[COLOR dodgerblue]Weekly Auto Clean - [/COLOR]' + weekly_onoff,BASEURL,111,ART+'system.png',FANART,'')
         Common.addItem('[COLOR dodgerblue]Auto Clear At Specific MB - [/COLOR]' + sizecheck_onoff,BASEURL,29,ART+'system.png',FANART,'')
@@ -200,7 +200,7 @@ def maintMenu():
         Common.addItem('[COLOR white]Delete Thumbnails[/COLOR]','url',23,ART+'clean.png',FANART,'')
         Common.addItem('[COLOR white]Purge Packages[/COLOR]','url',24,ART+'clean.png',FANART,'')
 
-        
+
 def tools():
 
         cachePath = os.path.join(xbmc.translatePath('special://home'), 'cache')
@@ -244,12 +244,12 @@ def tools():
         Common.addItem('View The Last Error In Log File','url',48,ART+'log.png',FANART,'')
         Common.addItem('View All ' + str(i) + ' Errors In Log File','url',49,ART+'log.png',FANART,'')
         Common.addItem('Delete Crash Logs','url',47,ART+'log.png',FANART,'')
-        #Common.addItem('Check for Broken Repositories','url',50,ART+'tool.png',FANART,'')
-        #Common.addItem('Check for Broken Sources in sources.xml','url',51,ART+'tool.png',FANART,'')
+        Common.addItem('Check for Broken Repositories','url',50,ART+'tool.png',FANART,'')
+        Common.addItem('Check for Broken Sources in sources.xml','url',51,ART+'tool.png',FANART,'')
         Common.addDir('Speed Test',BASEURL,43,ART+'speed.png',FANART,'')
         Common.addDir('System Reset [COLOR red](CAUTION)[/COLOR]','url',44,ART+'systemreset.png',FANART,'')
 
-        
+
 #######################################################################
 #						SPEEDTEST LIST
 #######################################################################
@@ -288,7 +288,7 @@ def setView(content, viewType):
                 xbmc.executebuiltin("Container.SetViewMode(%s)" % ADDON.getSetting(viewType) )
 
 ##############################    END    #########################################
-                
+
 #######################################################################
 #					OPEN THE SETTINGS DIALOG
 #######################################################################
@@ -410,7 +410,7 @@ elif mode==50:
 
 elif mode==51:
         maintenance.CHECK_BROKEN_SOURCES()
-        
+
 elif mode==100:
         backuprestore.READ_ZIP(url)
 
@@ -438,7 +438,7 @@ elif mode==108:
 
 elif mode==109:
         maintenance.RUYA_FIX()
-        
+
 elif mode==110:
         maintenance.AUTO_CLEAN_ON_OFF()
 

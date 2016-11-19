@@ -12,3 +12,6 @@ Clean up some codes
 
 v1.0.4
 Fixed maintenance codes
+
+v1.0.5
+Add more functions to tool section
