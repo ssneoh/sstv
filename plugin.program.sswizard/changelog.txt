@@ -15,3 +15,6 @@ Fixed maintenance codes
 
 v1.0.5
 Add more functions to tool section
+
+v1.0.6
+Add advanced settings to tool section

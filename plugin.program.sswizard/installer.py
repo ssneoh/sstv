@@ -145,3 +145,37 @@ def unzip(_in, _out, dp):
 		return False
 		
 	return True
+
+def INSTALL_ADVANCED(name,url,description):
+
+	#Check is the packages folder exists, if not create it.
+	path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+	if not os.path.exists(path):
+		os.makedirs(path)
+	buildname = name
+	dp = xbmcgui.DialogProgress()
+	dp.create(AddonTitle,"","","[B]Build: [/B]" + buildname)
+	buildname = "build"
+	lib=os.path.join(path, buildname+'.zip')
+	
+	try:
+		os.remove(lib)
+	except:
+		pass
+
+	dialog = xbmcgui.Dialog()
+	downloader.download(url, lib, dp)
+
+	addonfolder = xbmc.translatePath(os.path.join('special://','home'))
+	time.sleep(2)
+	dp.update(0,"Extracting Zip Please Wait",""," ")
+	unzip(lib,addonfolder,dp)
+	time.sleep(1)
+	try:
+		os.remove(lib)
+	except:
+		pass
+	#add_download = Common.add_one_advanced(name)
+	xbmc.executebuiltin("Container.Refresh")
+
+	dialog.ok(AddonTitle, "[COLOR white]Advanced Settings installed![/COLOR]","[COLOR white]You should now see an improvement in buffering[/COLOR]","[COLOR white][/COLOR]")

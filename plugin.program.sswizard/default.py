@@ -30,6 +30,9 @@ ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/re
 BASEURL = "http://ssneoh.site88.net/"
 SpeedTest = "http://pastebin.com/raw/gL8qCbEJ"
 wizard_rel = "http://pastebin.com/raw/Q60AX7Rz"
+AdvancedSettings    = "https://www.dropbox.com/s/017es9w4rrkgspn/wizard_rel.txt?raw=1"
+ADVANCED_SET_FILE   =  xbmc.translatePath(os.path.join('special://home/userdata/','advancedsettings.xml'))
+
 
 DEFAULT_SETTINGS    =  xbmc.translatePath(os.path.join('special://home/addons/' + addon_id,'resources/settings_default.xml'))
 ADDON_DATA          =  xbmc.translatePath(os.path.join('special://home/userdata/addon_data/' + addon_id))
@@ -37,6 +40,7 @@ USER_SETTINGS       =  xbmc.translatePath(os.path.join('special://home/userdata/
 
 
 params=parameters.get_params()
+dialog = xbmcgui.Dialog()
 runner.check()
 
 #######################################################################
@@ -246,8 +250,41 @@ def tools():
         Common.addItem('Delete Crash Logs','url',47,ART+'log.png',FANART,'')
         Common.addItem('Check for Broken Repositories','url',50,ART+'tool.png',FANART,'')
         Common.addItem('Check for Broken Sources in sources.xml','url',51,ART+'tool.png',FANART,'')
+        Common.addDir('Advanced Settings',BASEURL,52,ART+'asettings.png',FANART,'')
         Common.addDir('Speed Test',BASEURL,43,ART+'speed.png',FANART,'')
         Common.addDir('System Reset [COLOR red](CAUTION)[/COLOR]','url',44,ART+'systemreset.png',FANART,'')
+
+
+#######################################################################
+#		ADVANCED SETTINGS MENU for advancedsettings.xml FILES
+#######################################################################
+
+def ADVANCEDSETTINGS():
+
+        link = Common.OPEN_URL(AdvancedSettings).replace('\n','').replace('\r','')
+        match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?ersion="(.+?)"').findall(link)
+        if os.path.isfile(ADVANCED_SET_FILE):
+                Common.addItem('[COLOR white]Remove Current Advanced Settings Configuration[/COLOR]',BASEURL,53,ART+'asettings.png',FANART,'')
+        for name,url,iconimage,fanart,description in match:
+                Common.addItem(name,url,54,ART+'asettings.png',FANART,description)
+
+        #xbmc.executebuiltin('Container.SetViewMode(50)')
+
+
+#######################################################################
+#					REMOVE ADVANCEDSETTINGS.XML FILE
+#######################################################################
+
+def REMOVE_ADVANCED_FILE():
+
+        try:
+                os.remove(ADVANCED_SET_FILE)
+        except:
+                dialog.ok(AddonTitle, "[B][COLOR white]Encountered an error[/COLOR][/B]",'[COLOR white]We were unable to remove advancedsettings.xml the file.[/COLOR]')
+                sys.exit(0)
+
+        dialog.ok(AddonTitle, "[B][COLOR white]Success, we have removed the advancedsettings.xml file.[/COLOR][/B]",'[COLOR white][/COLOR]')
+        xbmc.executebuiltin("Container.Refresh")
 
 
 #######################################################################
@@ -260,6 +297,7 @@ def SPEEDTEST():
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?ersion="(.+?)"').findall(link)
         for name,url,iconimage,fanart,description in match:
                 Common.addItem('[COLOR ghostwhite]' + name + " | " + description + '[/COLOR]',url,45,ART+'speed.png',FANART,'')
+
 
 #######################################################################
 #						BACKUP MENU MENU
@@ -410,6 +448,15 @@ elif mode==50:
 
 elif mode==51:
         maintenance.CHECK_BROKEN_SOURCES()
+
+elif mode==52:
+        ADVANCEDSETTINGS()
+
+elif mode==53:
+        REMOVE_ADVANCED_FILE()
+
+elif mode==54:
+        installer.INSTALL_ADVANCED(name,url,description)
 
 elif mode==100:
         backuprestore.READ_ZIP(url)
