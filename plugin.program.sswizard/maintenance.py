@@ -723,13 +723,13 @@ def autocleannow():
             for d in dirs:
                 shutil.rmtree(os.path.join(root, d))
 
-    #xbmc.executebuiltin("Container.Refresh")
+    xbmc.executebuiltin("Container.Refresh")
 
-    #xbmcgui.Dialog().ok(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted")
+    xbmcgui.Dialog().ok(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted")
 
-    choice = xbmcgui.Dialog().yesno(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted","[COLOR lightsteelblue]Do you want to restart your device now to finish the process?[/COLOR]", yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
-    if choice == 1:
-        Common.KillKodi()    
+    #choice = xbmcgui.Dialog().yesno(MaintTitle,"Auto clean finished.","Your cache, thumbnails and packages have all been deleted","[COLOR lightsteelblue]Do you want to restart your device now to finish the process?[/COLOR]", yeslabel='[B][COLOR green]YES[/COLOR][/B]',nolabel='[B][COLOR red]NO[/COLOR][/B]')
+    #if choice == 1:
+        #Common.KillKodi()    
 
 def AUTO_CLEAR_CACHE_MB():
 
