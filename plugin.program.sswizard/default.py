@@ -199,7 +199,7 @@ def maintMenu():
         Common.addItem("[COLOR white]PACKAGES SIZE: [/COLOR]" + str(PACKAGES_SIZE),BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR white]THUMBNAIL SIZE: [/COLOR]" + str(THUMB_SIZE),BASEURL,'',ICON,FANART,'')
         Common.addItem("[COLOR powderblue][B]--------------------------[/B][/COLOR]",BASEURL,'',ICON,FANART,'')        
-        Common.addDir('[COLOR white]Auto Clean Device[/COLOR]','url',21,ART+'clean.png',FANART,'')
+        Common.addItem('[COLOR white]Auto Clean Device[/COLOR]','url',21,ART+'clean.png',FANART,'')
         Common.addItem('[COLOR white]Clear Cache[/COLOR]','url',22,ART+'clean.png',FANART,'')
         Common.addItem('[COLOR white]Delete Thumbnails[/COLOR]','url',23,ART+'clean.png',FANART,'')
         Common.addItem('[COLOR white]Purge Packages[/COLOR]','url',24,ART+'clean.png',FANART,'')
