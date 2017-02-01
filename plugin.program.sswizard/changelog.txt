@@ -24,3 +24,6 @@ Modify auto clean function to refresh instead of restart
 
 v1.0.8
 Fix auto clean codes
+
+v1.0.9
+Add Advanced Settings for Kodi <=16 and Kodi =>17

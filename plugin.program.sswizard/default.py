@@ -30,7 +30,7 @@ ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/re
 BASEURL = "http://ssneoh.site88.net/"
 SpeedTest = "http://pastebin.com/raw/gL8qCbEJ"
 wizard_rel = "http://pastebin.com/raw/Q60AX7Rz"
-AdvancedSettings    = "https://www.dropbox.com/s/017es9w4rrkgspn/wizard_rel.txt?raw=1"
+AdvancedSettings    = "https://www.dropbox.com/s/1c09l2wvy71k0b0/wizard_rel.txt?raw=1"
 ADVANCED_SET_FILE   =  xbmc.translatePath(os.path.join('special://home/userdata/','advancedsettings.xml'))
 
 
